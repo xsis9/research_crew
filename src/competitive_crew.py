@@ -3,7 +3,7 @@ from crewai.project import CrewBase, agent, crew, task
 from crewai_tools import SerperDevTool
 from typing import List
 
-from research_crew.tools.source_tracker import SourceTracker
+from tools.source_tracker import SourceTracker
 
 
 @CrewBase

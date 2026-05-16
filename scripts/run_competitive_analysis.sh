@@ -1,12 +1,16 @@
 #!/bin/bash
 # 竞品分析运行脚本
 
-# 获取脚本所在目录
+# 获取脚本所在目录的父目录
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-cd "$SCRIPT_DIR"
+PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
+cd "$PROJECT_DIR"
 
-# 激活虚拟环境并运行
+# 激活虚拟环境
 source .venv/bin/activate
+
+# 设置 PYTHONPATH
+export PYTHONPATH="$PROJECT_DIR/src:$PYTHONPATH"
 
 # 解析命令行参数
 COMPETITORS=""
@@ -36,26 +40,21 @@ if [[ -z "$INDUSTRY" ]]; then
     exit 1
 fi
 
-# 转换为列表格式
+echo "开始竞品分析..."
+echo "行业: $INDUSTRY"
 if [[ -n "$COMPETITORS" ]]; then
-    COMPETITORS="[${COMPETITORS//,/,\"}]"
-    COMPETITORS="${COMPETITORS/,/,\"}"
-else
-    COMPETITORS="[]"
+    echo "竞品: $COMPETITORS"
 fi
 
-echo "开始竞品分析..."
-echo "竞品: $COMPETITORS"
-echo "行业: $INDUSTRY"
-
+cd src
 python -c "
 import sys
-sys.path.insert(0, 'src')
-from research_crew.main import run_competitive_analysis
+sys.path.insert(0, '.')
+from main import run_competitive_analysis
 
 competitors = []
-if '$COMPETITORS' != '[]':
-    competitors = [c.strip() for c in '$COMPETITORS'.strip('[]').replace('\"', '').split(',')]
+if '$COMPETITORS':
+    competitors = [c.strip() for c in '$COMPETITORS'.split(',')]
 
 run_competitive_analysis(competitors, '$INDUSTRY')
 "

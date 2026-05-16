@@ -21,9 +21,7 @@ ENV/
 *.swo
 
 # Output (generated files)
-output/
-*.md
-!README.md
+# output/  # Commented out to allow uploading output files
 
 # Logs
 *.log

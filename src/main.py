@@ -1,5 +1,5 @@
 import os
-from research_crew.crews.competitive_crew.competitive_crew import CompetitiveCrew
+from src.competitive_crew import CompetitiveCrew
 
 os.makedirs('output', exist_ok=True)
 
